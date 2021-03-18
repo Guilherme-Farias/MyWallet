@@ -1,21 +1,23 @@
 import { useEffect, useState } from "react";
 import { api } from "../../services/api";
+import { formatValue } from "../../utils/formatValue";
 import { Container } from "./styles";
 
-interface TransactionsResponse {
-  id: number;
+interface Transaction {
+  id: string;
   title: string;
   amount: number;
   type: 'withdraw' | 'deposit';
   category: string;
+  created_at: Date;
 }
 
 export function TransactionsTable() {
-  const [transactions, setTransactions] = useState<TransactionsResponse[]>([])
+  const [transactions, setTransactions] = useState<Transaction[]>([])
 
   useEffect(() => {
     api.get('/transactions').then(response => {
-      setTransactions(response.data)
+      setTransactions(response.data.transactions)
     })
   }, [])
 
@@ -35,10 +37,11 @@ export function TransactionsTable() {
             <tr key={transaction.id}>
               <td>{transaction.title}</td>
               <td className={transaction.type}>
-                {transaction.type === "withdraw" && '-'} R${transaction.amount}
+                {transaction.type === "withdraw" && '- '}
+                {formatValue(transaction.amount)}
               </td>
               <td>{transaction.category}</td>
-              <td>17/03/2021</td>
+              <td>{new Date(transaction.created_at).toLocaleDateString('pt-BR',)}</td>
             </tr>
           ))}
         </tbody>
