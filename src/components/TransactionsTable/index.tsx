@@ -3,10 +3,8 @@ import { TransactionContext } from "../../TransactionContext";
 import { formatValue } from "../../utils/formatValue";
 import { Container } from "./styles";
 
-
-
 export function TransactionsTable() {
-  const transactions = useContext(TransactionContext);
+  const { transactions } = useContext(TransactionContext);
   return (
     <Container>
       <table>
